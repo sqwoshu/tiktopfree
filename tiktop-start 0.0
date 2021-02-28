@@ -1,0 +1,122 @@
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium import webdriver
+import time
+import pickle
+import random
+
+
+options = webdriver.ChromeOptions()
+options.add_argument('user=agend=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36')
+
+options.add_argument("--disable-blink-features=AutomationControlled")
+browser = webdriver.Chrome(
+    executable_path="C:\\Users\\123\\PycharmProjects\\untitled\\venv\\chromedriver\\chromedriver.exe",options=options)
+
+def login():
+    browser.get("https://intoli.com/blog/not-possible-to-block-chrome-headless/chrome-headless-test.html")
+
+    browser.get('https://www.tiktok.com/?lang=ru-RU')
+    for cookie in pickle.load(open('session_tt', 'rb')):
+        browser.add_cookie(cookie)
+    browser.refresh()
+
+    time.sleep(2)
+
+    browser.get('https://tiktop-free.com/')
+    for cookie in pickle.load(open('session_ttfree', 'rb')):
+        browser.add_cookie(cookie)
+    browser.refresh()
+
+def active_click():
+    go = WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Перейти в Личный кабинет')]")))
+    go.click()
+
+    kab = WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Заработать')]")))
+    kab.click()
+
+    acaunt = WebDriverWait(browser, 40).until(
+        EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Использовать этот аккаунт')]")))
+    acaunt.click()
+
+    close = WebDriverWait(browser, 20).until(
+        EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'closeIcon_c0c9')]")))
+    close.click()
+
+    iknow= WebDriverWait(browser, 20).until(
+        EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Хорошо, я понял')]")))
+    iknow.click()
+def fi_fi():
+    try:
+        follow_tt = browser.find_element_by_xpath("//*[contains(text(), 'Подписаться на')]")
+    except Exception:
+        pass
+
+def auto_bot():
+    try:
+        element_zar = browser.find_element_by_xpath('Выполнить')
+        if element_zar.is_enabled():
+            while True:
+                time.sleep(2)
+                window_before = browser.window_handles[0]
+                try:
+                    pass
+                except Exception:
+                    pass
+    except Exception:
+        pass
+
+def tiktok_foloow():
+    window_after = browser.window_handles[1]
+    browser.switch_to.window(window_after)
+    try:
+        fol = browser.find_element_by_xpath("//*[contains(text(), 'Подписки')]")
+        if fol.is_enabled():
+            time.sleep(random.randrange(2,3))
+            browser.close()
+    except Exception:
+        try:
+            browser.find_element_by_xpath("//*[contains(text(), 'Подписаться')]")
+            follow = WebDriverWait(browser, 10).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '.tiktok-btn-pc-primary')))
+            follow.click()
+
+            time.sleep(random.randrange(2,3))
+            browser.close()
+        except Exception:
+            time.sleep(1)
+            browser.close()
+
+def tiktok_like():
+    window_after = browser.window_handles[1]
+    browser.switch_to.window(window_after)
+    try:
+        pass
+    except Exception:
+        try:
+            pass
+        except Exception:
+            pass
+
+if __name__ == '__main__':
+    login()
+    active_click()
+    auto_bot()
+
+
+#Перейти в Личный кабинет
+# Заработать
+# Выберите аккаунт, который будете использовать для выполнения заданий
+# Использовать этот аккаунт
+# closeIcon_c0c9 закрыть всплывающее сообщение
+# Выполнить
+# Проверить
+# "//*[contains(text(), 'Заработать')]"
+# Хорошо, я понял
+#tiktok-btn-pc-primary тиктокподписаться
+#Подписаться на
+#Поставить лайк
+#Вы успешно выполнили задание!
